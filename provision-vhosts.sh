@@ -15,7 +15,7 @@ if [[ -z $5 ]]; then vhostFile="vhosts.conf";             else vhostFile=$5; fi
    sudo sed -i s,/var/www/$VAGRANTDIR/public,/var/www/$DOMAIN_SAMPLE/public,g /etc/apache2/sites-available/$DOMAIN_SAMPLE.conf
 
 # DEFAULT HOST
-    echo "Setting default hosts..."
+    echo "Setting $DOMAIN_DEFAULT as default host..."
     sudo cp /etc/apache2/sites-available/$DOMAIN_SAMPLE.conf /etc/apache2/sites-available/000-default.conf
     sudo sed -i s,$DOMAIN_SAMPLE,$DOMAIN_DEFAULT,g /etc/apache2/sites-available/000-default.conf
     sudo sed -i s,/var/www/$DOMAIN_DEFAULT/public,/var/www/projects,g /etc/apache2/sites-available/000-default.conf
@@ -23,7 +23,6 @@ if [[ -z $5 ]]; then vhostFile="vhosts.conf";             else vhostFile=$5; fi
 # SCOTCHBOX
     echo "Updating vhost config for $DOMAIN_SCOTCHBOX..."
     sudo sed -i s,/var/www/public,/var/www/$VAGRANTDIR/public,g /etc/apache2/sites-available/$DOMAIN_SCOTCHBOX.conf
-    #echo "Enabling $DOMAIN_SCOTCHBOX..."
     sudo a2ensite $DOMAIN_SCOTCHBOX.conf
 
 # CUSTOM VHOSTS
@@ -32,19 +31,11 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
     then
         DOMAIN=$(echo "$line" | cut -d '=' -f 1)
         PUBDIR=/var/www/$(echo "$line" | cut -d '=' -f 2-)
-
-        echo "Creating vhost config for $DOMAIN..."
+        echo "Creating vhost config for $DOMAIN with $PUBDIR..."
         sudo cp /etc/apache2/sites-available/$DOMAIN_SAMPLE.conf /etc/apache2/sites-available/$DOMAIN.conf
-
-        #echo "Updating public directory $PUBDIR for $DOMAIN..."
         sudo sed -i s,/var/www/$DOMAIN_SAMPLE/public,$PUBDIR,g /etc/apache2/sites-available/$DOMAIN.conf
-
-        #echo "Updating vhost alias and servername for $DOMAIN..."
         sudo sed -i s,$DOMAIN_SAMPLE,$DOMAIN,g /etc/apache2/sites-available/$DOMAIN.conf
-
-        #echo "Enabling $DOMAIN..."
         sudo a2ensite $DOMAIN.conf
-
     fi
 done < ./$vhostFile
 
