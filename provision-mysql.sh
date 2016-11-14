@@ -3,7 +3,7 @@
 # This script is modified from this original source: https://github.com/fideloper/Vaprobash/blob/master/scripts/mysql.sh
 
 #echo ">>> Installing MySQL Server $2"
-
+# TODO clean this script
 [[ -z "$1" ]] && { echo "!!! MySQL root password not set. Check the Vagrant file."; exit 1; }
 [[ -z "$2" ]] && { echo "!!! Dump file missing"; exit 1; }
 [[ -z "$3" ]] && { echo "!!! Database name missing"; exit 1; }
