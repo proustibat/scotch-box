@@ -23,7 +23,7 @@ if [[ -z $5 ]]; then vhostFile="vhosts.conf";             else vhostFile=$5; fi
 # SCOTCHBOX
     echo "Updating vhost config for $DOMAIN_SCOTCHBOX..."
     sudo sed -i s,/var/www/public,/var/www/$VAGRANTDIR/public,g /etc/apache2/sites-available/$DOMAIN_SCOTCHBOX.conf
-    echo "Enabling $DOMAIN_SCOTCHBOX..."
+    #echo "Enabling $DOMAIN_SCOTCHBOX..."
     sudo a2ensite $DOMAIN_SCOTCHBOX.conf
 
 # CUSTOM VHOSTS
@@ -36,26 +36,24 @@ while IFS='' read -r line || [[ -n "$line" ]]; do
         echo "Creating vhost config for $DOMAIN..."
         sudo cp /etc/apache2/sites-available/$DOMAIN_SAMPLE.conf /etc/apache2/sites-available/$DOMAIN.conf
 
-        echo "Updating public directory $PUBDIR for $DOMAIN..."
+        #echo "Updating public directory $PUBDIR for $DOMAIN..."
         sudo sed -i s,/var/www/$DOMAIN_SAMPLE/public,$PUBDIR,g /etc/apache2/sites-available/$DOMAIN.conf
 
-        echo "Updating vhost alias and servername for $DOMAIN..."
+        #echo "Updating vhost alias and servername for $DOMAIN..."
         sudo sed -i s,$DOMAIN_SAMPLE,$DOMAIN,g /etc/apache2/sites-available/$DOMAIN.conf
 
-        echo "Enabling $DOMAIN..."
+        #echo "Enabling $DOMAIN..."
         sudo a2ensite $DOMAIN.conf
 
     fi
 done < ./$vhostFile
 
 # RESTART OR RELOAD APACHE
-    echo "Restarting Apache to enable default and scotchbox sites..."
-    #sudo service apache2 reload
     sudo service apache2 restart
+    #sudo service apache2 reload
+
+
 
 # CREATING VARIABLE ENVIRONMENT
 #    sudo bash -c \'echo export APP_ENV="development" >> /etc/apache2/envvars\'
 #    sudo service apache2 restart
-
-# IMPORT DATABASE DUMP
-    #mysql -u root -proot scotchbox < /var/www/dump.sql
