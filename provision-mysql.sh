@@ -9,7 +9,7 @@
 [[ -z "$3" ]] && { echo "!!! Database name missing"; exit 1; }
 
 
-mysql_package=mysql-server
+#mysql_package=mysql-server
 
 #if [ $2 == "5.6" ]; then
 #    # Add repo for MySQL 5.6
